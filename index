@@ -1,0 +1,37 @@
+import nltk
+from nltk.chat.util import Chat, reflections
+import tkinter as tk
+from tkinter import scrolledtext
+
+pairs = [
+    (r'hi|hello', ['Hello! How can I assist you today?']),
+    (r'how are you?', ['I am just a bot, but I am doing great! How can I help you?']),
+    (r'what is your name?', ['I am a chatbot created by OpenAI.']),
+    (r'(.*) your name?', ['My name is Chatbot.']),
+    (r'(.*) (help|assist)', ['I am here to assist you. What do you need help with?']),
+    (r'bye|exit', ['Goodbye! Have a great day!']),
+]
+
+chatbot = Chat(pairs, reflections)
+
+def send_message():
+    user_message = user_input.get()
+    chat_history.insert(tk.END, "You: " + user_message + "\n")
+    response = chatbot.respond(user_message)
+    chat_history.insert(tk.END, "Bot: " + response + "\n")
+    user_input.delete(0, tk.END)
+    chat_history.yview(tk.END)
+
+window = tk.Tk()
+window.title("Chatbot")
+
+chat_history = scrolledtext.ScrolledText(window, wrap=tk.WORD, state='disabled')
+chat_history.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+user_input = tk.Entry(window, width=100)
+user_input.pack(padx=10, pady=10, side=tk.LEFT, fill=tk.X, expand=True)
+
+send_button = tk.Button(window, text="Send", command=send_message)
+send_button.pack(padx=10, pady=10, side=tk.RIGHT)
+
+window.mainloop()
